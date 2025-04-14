@@ -4,6 +4,7 @@ import { User } from "../models/userModel.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import twilio from "twilio";
 import { sendToken } from "../utils/sendToken.js";
+import crypto from "crypto";
 
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -170,7 +171,7 @@ export const verifyOTP = catchAsyncError(async (req, res, next) => {
       ],
     }).sort({ createdAt: -1 });
 
-    if (!userAllEntries) {
+    if (!userAllEntries.length) {
       return next(new ErrorHandler("User not found.", 404));
     }
 
@@ -291,4 +292,37 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
       )
     );
   }
+});
+
+export const resetPassword = catchAsyncError(async (req, res, next) => {
+  const { token } = req.params;
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+  if (!user) {
+    return next(
+      new ErrorHandler(
+        "Reset password token is invalid or has been expired.",
+        400
+      )
+    );
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(
+      new ErrorHandler("Password & confirm password do not match.", 400)
+    );
+  }
+
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+  await user.save();
+
+  sendToken(user, 200, "Reset Password Successfully.", res);
 });

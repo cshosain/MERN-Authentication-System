@@ -1,11 +1,12 @@
 import express from "express";
 import {
-  forgotPassword,
-  getUser,
-  login,
-  logout,
   register,
   verifyOTP,
+  login,
+  logout,
+  getUser,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/userController.js";
 import { isAuthenticated } from "../middlewares/auth.js";
 
@@ -17,5 +18,6 @@ router.post("/login", login);
 router.get("/logout", isAuthenticated, logout);
 router.get("/me", isAuthenticated, getUser);
 router.post("/password/forgot", forgotPassword);
+router.put("/password/reset/:token", resetPassword);
 
 export default router;
