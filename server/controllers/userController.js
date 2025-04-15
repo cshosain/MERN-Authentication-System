@@ -8,6 +8,26 @@ import crypto from "crypto";
 
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
+//check if email is already registered
+export const checkEmail = catchAsyncError(async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    return next(new ErrorHandler("Email is required.", 400));
+  }
+  const existingUser = await User.findOne({ email, accountVerified: true });
+
+  if (existingUser) {
+    return res.status(200).json({
+      success: false,
+      message: "Email already taken.",
+    });
+  }
+  res.status(200).json({
+    success: true,
+    message: "Email is available.",
+  });
+});
+
 export const register = catchAsyncError(async (req, res, next) => {
   try {
     const { name, email, phone, password, verificationMethod } = req.body;
