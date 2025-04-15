@@ -1,14 +1,35 @@
+import { useContext, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Auth from "./pages/Auth";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import Home from "./pages/Home.jsx";
+import Auth from "./pages/Auth.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import OtpVerification from "./pages/OtpVerification";
+import axios from "axios";
+import Context from "./contexts/Context.js";
+import OtpVerification from "./pages/OtpVerification.jsx";
 
 const App = () => {
+  const { setIsAuthenticated, setUser } = useContext(Context);
+
+  useEffect(() => {
+    const getUser = async () => {
+      await axios
+        .get("http://localhost:4000/api/v1/user/me", { withCredentials: true })
+        .then((res) => {
+          setUser(res.data.user);
+          setIsAuthenticated(true);
+        })
+        .catch((err) => {
+          setUser(null);
+          setIsAuthenticated(false);
+        });
+    };
+    getUser();
+  }, []);
+
   return (
     <>
       <Router>
