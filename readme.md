@@ -12,14 +12,15 @@ This project is a robust and secure authentication system built using **Node.js*
   - Reset Password: Allows users to reset their password using a secure token.
 - **User Profile**: Fetch authenticated user details.
 - **Automated Cleanup**: Removes unverified accounts after 30 minutes using a cron job.
-- **Error Handling**: Centralized error handling for better debugging and user feedback.
+- **Error Handling**: Centralized error handling for better debugging and user feedback. Also prevent unexpected server crushing.
 - **Security**:
   - Password hashing with bcrypt.
   - JWT-based authentication.
   - Secure cookies for session management.
 - **Environment Configuration**: Uses `dotenv` for managing environment variables.
-
-## Project Structure
+- **Request Optimization**:
+  - **Rate Limiting**: Limits the number of requests a user can make, to prevent abuse.
+  - **Debounce Requests**: Prevents duplicate or rapid consecutive requests to improve performance.
 
 ## 📁 Project Structure
 
@@ -43,6 +44,8 @@ server/
 ├── middlewares/
 │   ├── auth.js              # Middleware for user authentication
 │   ├── catchAsyncError.js   # Utility to catch async errors in route handlers
+│   ├── debounceRequests.js  # Middleware to prevent duplicate requests
+│   ├── rateLimiter.js       # Middleware to limit the number of requests
 │   └── error.js             # Centralized error handler
 
 ├── models/
