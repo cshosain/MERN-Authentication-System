@@ -132,7 +132,8 @@ async function sendVerificationCode(
     } else {
       return res.status(500).json({
         success: false,
-        message: "Invalid verification method.",
+        message:
+          "Invalid verification method or calling in your country is currently unavailable.",
       });
     }
   } catch (error) {
