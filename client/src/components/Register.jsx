@@ -14,10 +14,14 @@ const Register = () => {
   const handleRegister = async (data) => {
     data.phone = `+880${data.phone}`;
     await axios
-      .post("http://localhost:4000/api/v1/user/register", data, {
-        withCredentials: true,
-        headers: { "Content-Type": "application/json" },
-      })
+      .post(
+        "https://mern-authentication-zlwb.onrender.com/api/v1/user/register",
+        data,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      )
       .then((res) => {
         toast.success(res.data.message);
         navigateTo(`/otp-verification/${data.email}/${data.phone}`);

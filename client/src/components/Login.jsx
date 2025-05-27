@@ -16,12 +16,16 @@ const Login = () => {
   } = useForm();
   const handleLogin = async (data) => {
     await axios
-      .post("http://localhost:4000/api/v1/user/login", data, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        "https://mern-authentication-zlwb.onrender.com/api/v1/user/login",
+        data,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         toast.success(res.data.message);
         setIsAuthenticated(true);
