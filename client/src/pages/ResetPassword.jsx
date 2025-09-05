@@ -10,12 +10,14 @@ const ResetPassword = () => {
   const { token } = useParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const baseUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1/user";
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
     await axios
       .put(
-        `https://mern-authentication-zlwb.onrender.com/api/v1/user/password/reset/${token}`,
+        `${baseUrl}/password/reset/${token}`,
         { password, confirmPassword },
         {
           withCredentials: true,

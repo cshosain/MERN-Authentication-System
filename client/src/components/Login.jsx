@@ -8,6 +8,8 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const { setIsAuthenticated, setUser } = useContext(Context);
   const navigateTo = useNavigate();
+  const baseUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1/user";
 
   const {
     register,
@@ -16,16 +18,12 @@ const Login = () => {
   } = useForm();
   const handleLogin = async (data) => {
     await axios
-      .post(
-        "https://mern-authentication-zlwb.onrender.com/api/v1/user/login",
-        data,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`${baseUrl}/login`, data, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
         toast.success(res.data.message);
         setIsAuthenticated(true);

@@ -5,12 +5,14 @@ import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const baseUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1/user";
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     await axios
       .post(
-        "https://mern-authentication-zlwb.onrender.com/api/v1/user/password/forgot",
+        `${baseUrl}/password/forgot`,
         { email },
         {
           withCredentials: true,

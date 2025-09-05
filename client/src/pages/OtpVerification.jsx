@@ -9,6 +9,8 @@ const OtpVerification = () => {
   const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
   const { email, phone } = useParams();
   const [otp, setOtp] = useState(["", "", "", "", ""]);
+  const baseUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1/user";
 
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return;
@@ -36,14 +38,10 @@ const OtpVerification = () => {
       phone,
     };
     await axios
-      .post(
-        "https://mern-authentication-zlwb.onrender.com/api/v1/user/otp-verification",
-        data,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        }
-      )
+      .post(`${baseUrl}/otp-verification`, data, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      })
       .then((res) => {
         toast.success(res.data.message);
         setIsAuthenticated(true);

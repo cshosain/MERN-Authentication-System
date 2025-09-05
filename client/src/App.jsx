@@ -13,11 +13,13 @@ import OtpVerification from "./pages/OtpVerification.jsx";
 
 const App = () => {
   const { setIsAuthenticated, setUser } = useContext(Context);
+  const baseUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1/user";
 
   useEffect(() => {
     const getUser = async () => {
       await axios
-        .get("https://mern-authentication-zlwb.onrender.com/api/v1/user/me", {
+        .get(`${baseUrl}/me`, {
           withCredentials: true,
         })
         .then((res) => {
@@ -30,7 +32,7 @@ const App = () => {
         });
     };
     getUser();
-  }, []);
+  }, [baseUrl, setIsAuthenticated, setUser]);
 
   return (
     <>

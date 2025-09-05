@@ -10,10 +10,12 @@ import Footer from "../layout/Footer.jsx";
 
 const Home = () => {
   const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
+  const baseUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1/user";
 
   const logout = async () => {
     await axios
-      .get("https://mern-authentication-zlwb.onrender.com/api/v1/user/logout", {
+      .get(`${baseUrl}/logout`, {
         withCredentials: true,
       })
       .then((res) => {
